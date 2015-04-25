@@ -1,0 +1,102 @@
+<template name="Home">
+        <div class="jumbotron" id="jumbotron">
+            <center class="jumbotron-header">
+                <div class="page-header"><h1>{{{_ "home.welcome"}}}</h1></div>
+                <h3>{{{_ "home.message"}}}</h3>
+                <p>{{{_ "home.secondmessage"}}}</p>
+            </center>
+            <br/>
+            <form id="searchform">
+                <div class="row">
+                    <div class="input-group input-group-lg">
+                        {{> esInput index="books" class="form-control" placeholder=placeholder}}
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </span>
+                    </div>
+                </div>
+            </form>
+    </div>
+    <br/>
+    {{#ifEsIsSearching index="books"}}
+        {{_ "search.searching"}}
+    {{else}}
+        <div class="list-group">
+            {{#esEach index="books"}}
+                {{> BookForHome}}
+            {{/esEach}}
+        </div>
+        {{> esLoadMoreButton index="books"}}
+    {{/ifEsIsSearching}}
+
+    {{#ifEsHasNoResults index="books"}}
+        <h3>{{_ "search.notfound"}} <a href="{{pathFor 'AddBook'}}" class="btn btn-primary">{{_ 'home.addabook'}}</a></h3>
+    {{/ifEsHasNoResults}}
+</template>
+
+<template name="BookForHome">
+    <a class="list-group-item" href="{{pathFor 'ViewBook' _id=this._id}}">
+        <div class="row">
+            <div class="col-lg-2">
+                <img class="img-responsive" src="{{thumb}}">
+            </div>
+            <div class="col-lg-10">
+                <h4 class="list-group-item-heading">{{title}}<small> {{authors}}</small></h4>
+                <p class="list-group-item-text">{{{summary}}}</p>
+            </div>
+        </div>
+    </a>
+</template>
+
+<template name="testing">
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #eee;
+        }
+    </style>
+    <div id="testingbody">
+        <div class="container">
+            <div class="form-signin">
+                {{#if isKeyValid}}
+                    <div class="alert alert-danger"><b>Clé testeur non valide !</b></div>
+                {{/if}}
+                <center><h2 class="form-signin-heading"><i class="brand-icon fa fa-book"></i> AfterBooks</h2></center>
+                <br /><br />
+                <center><h2 class="form-signin-heading">Accès restreint !</h2></center>
+                <br />
+                <label for="testingname" class="sr-only">Prénom SANS ACCENTS</label>
+                <input type="text" id="testingname" class="form-control" placeholder="Prénom SANS ACCENTS" required>
+                <label for="testingkey" class="sr-only">Clé testeur</label>
+                <input type="password" id="testingkey" class="form-control" placeholder="Clé testeur" required>
+                <button id="testingbutton" class="btn btn-lg btn-primary btn-block">C'est bon !</button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="generatekey">
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #eee;
+        }
+    </style>
+    <div id="testingbody">
+        <div class="container">
+            <div class="form-signin">
+                <div class="alert alert-info"><b>Clé : </b>{{$.Session.get 'generatedKey'}}</div>
+                <center><h2 class="form-signin-heading">Générateur de clé</h2></center>
+                <br />
+                <label for="gengname" class="sr-only">Prénom SANS ACCENTS</label>
+                <input type="text" id="genname" class="form-control" placeholder="Prénom SANS ACCENTS" required>
+                <br />
+                <button id="generatebutton" class="btn btn-lg btn-primary btn-block">C'est bon !</button>
+            </div>
+        </div>
+    </div>
+</template>

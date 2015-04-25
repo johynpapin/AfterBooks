@@ -1,0 +1,89 @@
+Template.AddBook.helpers({
+    googlesubmited: function() {
+        return Session.get('googlesubmited');
+    },
+    googlesearchresults: function() {
+        return Session.get('googlesearchresults');
+    }
+});
+
+Template.AddBook.events({
+    'click .googlesearchsubmit': function(event, template) {
+        Session.set('googlesubmited', true);
+        Meteor.call('googlebooks', {query: $('#googlesearchtitle').val()}, function(error, results) {
+            if (error) {
+                console.error(error);
+            }
+            else {
+                var data = JSON.parse(results.content);
+                if(data.totalItems != 0) {
+                    Session.set('googlesearchresults', data.items);
+                } else {
+                    Session.set('googlesearchresults', false);
+                }
+            }
+        });
+    }
+});
+
+Template.GoogleBook.events({
+    'click .googlebook': function(event, template) {
+        var thisfs = this;
+        var authors = [];
+        _.each(this.volumeInfo.authors, function(author) {
+            authors.push({name: author});
+        });
+        swal({title: TAPi18n.__("modals.confirm"),text: TAPi18n.__("modals.confirmtext"),type: 'warning',showCancelButton: true,confirmButtonColor: '#A5DC86',confirmButtonText: 'Importe le!',cancelButtonText: 'Non, annule!',closeOnConfirm: false, closeOnCancel: false},
+            function(isConfirm){
+                if (isConfirm) {
+                    var doc = {title: thisfs.volumeInfo.title, authors: authors, summary: thisfs.volumeInfo.description, thumb: thisfs.volumeInfo.imageLinks.thumbnail, googleLink: thisfs.selfLink, googleId: thisfs.id, bookRates: 0, bookInitiator:Meteor.userId()};
+                    Meteor.call('insertBook', {doc: doc}, function(error, result) {
+                        if (error) {
+                            console.error(error);
+                            swal(TAPi18n.__("utils.error"), "Une erreur est survenue pendant l'importation. Veuillez réessayer.", 'error');
+                        } else {
+                            Router.go("EditBook", {_id: result});
+                            swal(TAPi18n.__("utils.itsok"), TAPi18n.__("modals.importtext"), 'success')
+                        }
+                    });
+                } else {swal(TAPi18n.__("modals.cancel"), TAPi18n.__("modals.canceltext"), 'error');}
+            }
+        );
+    }
+});
+
+// Template : BookAddBtra
+Template.BookForAddBtra.helpers({
+    verif: function() {
+        var disabled = '';
+        var thisid = this._id;
+        var selectedid = Session.get('selected');
+        var book = Books.findOne(selectedid);
+        if(selectedid == thisid) {
+            disabled = 'disabled';
+        } else {
+            _.each(book.btra, function(btra) {
+                if(btra._id == thisid) {
+                    disabled = 'disabled';
+                }
+            });
+        }
+        return disabled;
+    }
+});
+
+Template.BookForAddBtra.events({
+    'click .bookforaddbtra': function(event, template) {
+        if(!_.contains(event.currentTarget.classList, 'disabled')) {
+            Meteor.call("insertBtra", {book_id: Session.get('selected'), btra_id: this._id}, function(error, result) {
+                if (error) {
+                    console.error(error);
+                    swal(TAPi18n.__("utils.error"), "Une erreur est survenue pendant l'iinsertion. Veuillez réessayer.", 'error');
+                } else {
+                    Router.go("ViewBook", {_id: Session.get('selected')});
+                    swal(TAPi18n.__("utils.itsok"), TAPi18n.__("modals.importtext"), 'success')
+                }
+            });
+        }
+    }
+});

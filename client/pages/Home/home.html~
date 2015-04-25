@@ -1,0 +1,59 @@
+<template name="Home">
+  <div class="jumbotron">
+    <center>
+      <h2>{{_ "home.welcome"}}</h2>
+      <h4>{{_ "home.message"}}</h4>
+    </center>
+    <br/>
+    <div class="progress">
+      <div class="progress-bar progress-bar-primary progress-bar-striped active" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 95%">
+        <span class="sr-only">95% Complete</span>
+      </div>
+    </div>
+    <br/>
+    <form id="searchform">
+      <div class="row">
+        <div class="input-group input-group-lg">
+           {{> esInput index="books" class="form-control" placeholder="Ex : Artemis Fowl, Harry Potter, ..."}}
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+              <span class="fa fa-search"></span>
+            </button>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+  <br/>
+  {{#ifEsIsSearching index="books"}}
+    {{_ "search.searching"}}
+  {{else}}
+    <div class="list-group">
+      {{#esEach index="books"}}
+        {{> Book}}
+      {{/esEach}}
+    </div>
+    {{> esLoadMoreButton index="books"}}
+  {{/ifEsIsSearching}}
+
+  {{#ifEsHasNoResults index="books"}}
+    <h3>{{_ "search.notfound"}} <a href="{{pathFor 'AddBook'}}" class="btn btn-primary">{{_ "buttons.addabook"}}</a></h3>
+  {{/ifEsHasNoResults}}
+</template>
+
+<template name="Book">
+    <a class="list-group-item homebook wrapper {{verif}}">
+        <div id="row" class="row">
+            <div class="col-lg-1">
+                <img class="img-responsive" src="{{thumb}}">
+            </div>
+            <div class="col-lg-11">
+                <h4 class="list-group-item-heading">{{title}}<small> {{authors}}</small></h4>
+                <p class="list-group-item-text">{{summary}}</p>
+            </div>
+            <div id="slide">
+                <span>Voter : <button class="btn btn-primary btn-lg vote {{voteclass}}"> {{bookRates}}</button></span>
+            </div>
+        </div>
+    </a>
+</template>

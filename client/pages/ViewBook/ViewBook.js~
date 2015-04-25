@@ -1,0 +1,173 @@
+Template.ViewBook.helpers({
+    authors: function() {
+        var authors = TAPi18n.__("books.nobody");
+        if(this.authors.length == 1) {
+            authors = TAPi18n.__("books.from") + " " + this.authors[0].name +".";
+        } else {
+            var i = 0;
+            var thisfe = this;
+            authors = TAPi18n.__("books.from") + " ";
+            _.each(this.authors, function(author) {
+                if(thisfe.authors.length - 2 == i) {
+                    authors += author.name + " " + TAPi18n.__("books.and") + " ";
+                } else if(thisfe.authors.length - 1 == i) {
+                    authors += author.name;
+                } else {
+                    authors += author.name + ", ";
+                }
+                i++;
+            });
+            authors += ".";
+        }
+        return authors;
+    },
+    addbtraclass: function() {
+        var addbtraclass = '';
+        if(!Meteor.user()) {
+            addbtraclass = 'disabled';
+        }
+        return addbtraclass;
+    },
+    addbtratooltipclass: function() {
+        var addbtraclass = '';
+        if(!Meteor.user()) {
+            addbtraclass = 'simptip-position-top simptip-fade simptip-smooth simptip-warning';
+        }
+        return addbtraclass;
+    },
+    addbtratooltipdata: function() {
+        var btraclass = '';
+        if(!Meteor.user()) {
+            btraclass = TAPi18n.__("utils.mustbeconnected");
+        }
+        return btraclass;
+    },
+    isInitiator: function() {
+        if (Meteor.userId() && Meteor.userId() == this.bookInitiator) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+});
+
+Template.ViewBook.events({
+    'click #addbtra': function(event, template) {
+        bootbox.dialog({
+            title: TAPi18n.__("books.title"),
+            message: renderTmp(Template.ModalBtra),
+            buttons: {
+                success: {
+                    label: TAPi18n.__("utils.itsok"),
+                    className: "btn-success",
+                    callback: function () {
+                        if($('.modalbtra.active').length != 0) {
+                            Meteor.call("insertBtra", {book_id: template.data._id, btra_id: $('.modalbtra.active').attr('data-id')}, function(error, results) {
+                                if (error) {
+                                    console.error(error);
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+
+// Template : Btra
+Template.Btra.helpers({
+    thumb: function() {
+        var btra = Books.findOne(this._id);
+        return btra.thumb;
+    },
+    title: function() {
+        var btra = Books.findOne(this._id);
+        return btra.title;
+    },
+    authors: function() {
+        var btra = Books.findOne(this._id);
+        var authors = TAPi18n.__("books.nobody");
+        if(btra.authors.length == 1) {
+            authors = TAPi18n.__("books.from") + " " + btra.authors[0].name +".";
+        } else {
+            var i = 0;
+            authors = TAPi18n.__("books.from") + " ";
+            _.each(btra.authors, function(author) {
+                if(btra.authors.length - 2 == i) {
+                    authors += author.name + " " + TAPi18n.__("books.and") + " ";
+                } else if(btra.authors.length - 1 == i) {
+                    authors += author.name;
+                } else {
+                    authors += author.name + ", ";
+                }
+                i++;
+            });
+            authors += ".";
+        }
+        return authors;
+    },
+    voteclass: function() {
+        var voteclass = '';
+        var btra_id = this._id;
+        if(Meteor.user()) {
+            var book = Books.findOne(Session.get('selected'));
+            _.each(book.btra, function(btra) {
+                if(btra._id == btra_id) {
+                    if(btra.initiator == Meteor.userId()) {
+                        voteclass = "fa fa-lock disabled";
+                    } else if(book.btraRaters == undefined || !_.contains(book.btraRaters, Meteor.userId())) {
+                        voteclass = "fa fa-arrow-up";
+                    } else {
+                        voteclass = "fa fa-arrow-down";
+                    }
+                }
+            });
+        } else {
+            voteclass = "fa fa-lock disabled";
+        }
+        return voteclass;
+    },
+    btratooltipclass: function() {
+        var btraclass = '';
+        if(!Meteor.user()) {
+            btraclass = 'simptip-position-top simptip-fade simptip-smooth simptip-warning simptip-multiline';
+        }
+        return btraclass;
+    },
+    btratooltipdata: function() {
+        var btraclass = '';
+        if(!Meteor.user()) {
+            btraclass = TAPi18n.__("utils.mustbeconnected");
+        }
+        return btraclass;
+    }
+});
+
+Template.Btra.events({
+    'click .vote': function(event, template) {
+        Session.set('voteevent', true);
+        if(_.contains(event.currentTarget.classList, 'fa-arrow-up')) {
+            Meteor.call("rateBtra", {book_id: Session.get('selected'), btra_id: this._id, vote_type: 'up'}, function(error, results) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        } else if (_.contains(event.currentTarget.classList, 'fa-arrow-down')) {
+            Meteor.call("rateBtra", {book_id: Session.get('selected'), btra_id: this._id, vote_type: 'down'}, function(error, results) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        } else {
+        }
+    },
+    'click .btralink': function(event, template) {
+        // For kill the event if the .vote event is launched :
+        if(Session.get('voteevent') == true) {
+            Session.set('voteevent', false);
+        } else {
+            Router.go('/books/'+this._id);
+        }
+    }
+});

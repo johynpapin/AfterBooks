@@ -1,0 +1,79 @@
+Template.Home.rendered = function () {
+};
+
+Template.Home.events({
+  'click .addbook': function (event, template) {
+    bootbox.dialog({
+      title: TAPi18n.__("modals.addingabook"),
+      message: renderTmp(Template.ModalAdd)
+    });
+  }
+});
+
+Template.Book.helpers({
+    authors: function() {
+        var authors = TAPi18n.__("books.nobody");
+        if(this.authors.length == 1) {
+            authors = TAPi18n.__("books.from") + " " + this.authors[0].name +".";
+        } else {
+            var i = 0;
+            var thisfe = this;
+            authors = TAPi18n.__("books.from") + " ";
+            _.each(this.authors, function(author) {
+                if(thisfe.authors.length - 2 == i) {
+                    authors += author.name + " " + TAPi18n.__("books.and") + " ";
+                } else if(thisfe.authors.length - 1 == i) {
+                    authors += author.name;
+                } else {
+                    authors += author.name + ", ";
+                }
+                i++;
+            });
+            authors += ".";
+        }
+        return authors;
+    },
+    voteclass: function() {
+        var voteclass = '';
+        var book_id = this._id;
+        if (Meteor.user()) {
+            var book = Books.findOne(book_id);
+            if (book.bookInitiator == Meteor.userId()) {
+                voteclass = "fa fa-lock disabled";
+            } else if (book.bookRaters == undefined || !_.contains(book.bookRaters, Meteor.userId())) {
+                voteclass = "fa fa-arrow-up";
+            } else {
+                voteclass = "fa fa-arrow-down";
+            }
+        } else {
+            voteclass = "fa fa-lock disabled";
+        }
+        return voteclass;
+    }
+});
+
+Template.Book.events({
+    'click .homebook': function(event, template) {
+        if(Session.get('homevoteevent') == true) {
+            Session.set('homevoteevent', false);
+        } else {
+            Router.go('/books/' + this._id);
+        }
+    },
+    'click .vote': function(event, template) {
+        Session.set('homevoteevent', true);
+        if(_.contains(event.currentTarget.classList, 'fa-arrow-up')) {
+            Meteor.call("rateBook", {book_id: this._id, vote_type: 'up'}, function(error, results) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        } else if (_.contains(event.currentTarget.classList, 'fa-arrow-down')) {
+            Meteor.call("rateBook", {book_id: this._id, vote_type: 'down'}, function(error, results) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        }
+    }
+});

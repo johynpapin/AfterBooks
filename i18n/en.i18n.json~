@@ -1,0 +1,74 @@
+{
+  "search": {
+    "placeholder": "Title of a book. Ex : Artemis Fowl, Harry Potter,...",
+    "searching": "Searching...",
+    "notfound": "Book not found !",
+    "noresults": "No books founds..."
+  },
+  "swal": {
+    "confirm": {
+      "title": "Confirmation...",
+      "text": "Please, confirm the importation of this book.",
+      "confirm": "Import it !",
+      "cancel": "No, cancel !"
+    },
+    "cancel": {
+      "title": "Importation cancelled.",
+      "text": "The importation of this book is now cancelled..."
+    },
+    "imported": {
+      "title": "Importation ok !",
+      "text": "The importation of this book is a success !"
+    },
+    "importerror": "Error during the importation... Please, retry."
+  },
+  "labels": {
+    "title": "Titre of the book",
+    "summary": "Little summary of the book",
+    "thumb": "Link to the thumbnail of the book",
+    "authors": {
+      "label": "Author(s) of the book"
+    }
+  },
+  "utils": {
+    "mustbeconnected": "You must connected to do that !",
+    "success": "It's okay !",
+    "error": "Error...",
+    "warning": "Warning !",
+    "authors": {
+      "nobody": "By someone.",
+      "from": "By",
+      "and": "and"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About"
+  },
+  "home": {
+    "welcome": "Welcome on AfterBooks !",
+    "message": "AfterBooks allows you to discover new books depending on the last books you read...",
+    "addabook": "Add one ?"
+  },
+  "addbook": {
+    "title": "Import a book",
+    "small": "Two ways...",
+    "google": "Whith google books",
+    "bythehand": "By the hand",
+    "formtitle": "Please complete this form.",
+    "insert": "Import !",
+    "nosummary": "This book don't have summary !"
+  },
+  "viewbook": {
+    "btra": "After this book, the community recommend...",
+    "idea": "I have an idea of book to read after !",
+    "editmode": {
+      "warning": "Edit mode !",
+      "text": "Click on the title to edit it. When you have finish, click a second time on the edit button."
+    }
+  },
+  "addbtra": {
+    "title": "Choise a book to read after",
+    "small": "Be serious..."
+  }
+}

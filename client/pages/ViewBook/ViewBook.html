@@ -1,0 +1,69 @@
+<template name="ViewBook">
+    <ol class="breadcrumb">
+        <li><a href="{{pathFor 'Home'}}">{{_ "nav.home"}}</a></li>
+        <li class="active">{{title}}</li>
+    </ol>
+    {{#if editmode}}<div class="alert alert-warning" role="alert"><b>{{_ "viewbook.editmode.warning"}}</b> {{_ "viewbook.editmode.text"}}</div>{{/if}}
+    <div class="page-header">
+        <h1>
+            {{#if editmode}}
+                <span class="editabletitle" contenteditable="true">{{title}}</span>
+            {{else}}
+                {{title}}
+            {{/if}}
+            <small>{{authors}}</small>
+            <div class="pull-right" style="text-align:right">
+                {{#if isInitiator}}<button class="btn btn-warning btn-lg editbook"><i class="fa fa-edit"></i></button>{{/if}}
+                <button class="btn btn-primary btn-lg vote {{voteclass}}"> {{bookRates}}</button>
+            </div>
+        </h1>
+    </div>
+    <div class="row">
+        <img class="col-md-2 img-rounded" src="{{thumb}}">
+        <div class="col-md-10">
+            <p>{{#if editmode}}{{> Template.dynamic template='Froala' data=this }}{{else}}{{{summary}}}{{/if}}</p>
+        </div>
+    </div>
+    <br/>
+    <h3>
+        {{_ "viewbook.btra"}}
+        <div class="pull-right" style="text-align:right"><a href="{{pathFor 'AddBtra'}}" class="btn btn-primary btn-lg">{{_ "viewbook.idea"}}</a></div>
+    </h3>
+    <br/>
+    <div class="well btra-well">
+        <div class="row">
+            <div class="span12">
+                {{#if btra}}
+                    {{#each btra}}
+                        {{> Btra}}
+                    {{/each}}
+                {{else}}
+                    <center><h1 style="color: white;">{{_ "viewbook.nobtra"}}</h1></center>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="Btra">
+    <div class="col-md-2 btra">
+        <span class="btra-tooltip">
+            <span class="tooltip-title" style="display: none;">
+                <b>{{title}}</b> {{authors}}
+            </span>
+            <span class="tooltip-content" style="display: none;">
+                {{_ "viewbook.youcanvote"}}
+                <span class="{{mustbeconnectedclass}}" data-tooltip="{{mustbeconnecteddata}}">
+                    <button class="btn btn-primary btn-lg vote {{voteclass}}"> {{rates}}</button>
+                </span>
+            </span>
+            <a href="{{pathFor 'ViewBook' _id=this._id}}" class="btra-link">
+                <img class="img-btra img-responsive" style="max-width: 180px;" src="{{thumb}}">
+            </a>
+        </span>
+    </div>
+</template>
+
+<template name="Froala">
+    <textarea name="content" id="editablesummary">{{summary}}</textarea>
+</template>

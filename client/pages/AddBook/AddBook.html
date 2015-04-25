@@ -1,0 +1,123 @@
+<template name="AddBook">
+    <div class="page-header">
+        <h1>{{_ "addbook.title"}} <small>{{_ "addbook.small"}}</small></h1>
+    </div>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-warning">
+            <div class="panel-heading" role="tab" id="headingAmazon">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseAmazon" aria-expanded="true" aria-controls="collapseAmazon">
+                        {{_ "addbook.amazon"}}
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseAmazon" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingAmazon">
+                <div class="panel-body">
+                    <div class="input-group input-group-lg">
+                        <input type="text" id="amazonsearchtitle" class="form-control" value="{{$.Session.get 'searchCurrentValue'}}" placeholder={{_ 'search.amazonplaceholder'}}>
+                        <span class="input-group-btn amazonsearchsubmit">
+                            <button class="btn btn-default" type="button">
+                                <span class="fa fa-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <br/>
+                    {{#if amazonsubmited}}
+                        {{#if amazonsearchresults}}
+                            <div class="list-group">
+                                {{#each amazonsearchresults}}
+                                    {{> AmazonBook}}
+                                {{/each}}
+                            </div>
+                            {{{amazonpaginator}}}
+                        {{else}}
+                            {{#if amazonnoresults}}
+                                <p>{{_ "search.noresults"}}</p>
+                            {{else}}
+                                <p>{{_ "search.searching"}}</p>
+                            {{/if}}
+                        {{/if}}
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading" role="tab" id="headingGoogle">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseGoogle" aria-expanded="false" aria-controls="collapseGoogle">
+                        {{_ "addbook.google"}}
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseGoogle" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingGoogle">
+                <div class="panel-body">
+                    <div class="input-group input-group-lg">
+                        <input type="text" id="googlesearchtitle" class="form-control" value="{{$.Session.get 'searchCurrentValue'}}" placeholder={{_ 'search.placeholder'}}>
+                        <span class="input-group-btn googlesearchsubmit">
+                          <button class="btn btn-default" type="button">
+                              <span class="fa fa-search"></span>
+                          </button>
+                        </span>
+                    </div>
+                    <br/>
+                    {{#if googlesubmited}}
+                        {{#if googlesearchresults}}
+                            <div class="list-group">
+                                {{#each googlesearchresults}}
+                                    {{> GoogleBook}}
+                                {{/each}}
+                            </div>
+                            {{{googlepaginator}}}
+                        {{else}}
+                            {{#if googlenoresults}}
+                                <p>{{_ "search.noresults"}}</p>
+                            {{else}}
+                                <p>{{_ "search.searching"}}</p>
+                            {{/if}}
+                        {{/if}}
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="GoogleBook">
+    <a class="list-group-item {{disabled}}">
+        <div class="row">
+            <div class="col-lg-2">
+                <img class="img-responsive img-rounded" src="{{#if volumeInfo.imageLinks.thumbnail}}{{volumeInfo.imageLinks.thumbnail}}{{else}}http://placehold.it/128x188&text=Img not found !{{/if}}">
+            </div>
+            <div class="col-lg-10">
+                <h4 class="list-group-item-heading">{{volumeInfo.title}}</h4>
+            <p class="list-group-item-text">
+                {{#if volumeInfo.description}}
+                    {{volumeInfo.description}}
+                {{else}}
+                    <br/><div class="alert alert-warning" role="alert"><b>{{_ "utils.warning"}}</b> {{_ "addbook.nosummary"}}</div>
+                {{/if}}
+                </p>
+            </div>
+        </div>
+    </a>
+</template>
+
+<template name="AmazonBook">
+    <a class="list-group-item {{disabled}}">
+        <div class="row">
+            <div class="col-lg-2">
+                <img class="img-responsive img-rounded" src="{{#if LargeImage.[0].URL.[0]}}{{LargeImage.[0].URL.[0]}}{{else}}http://placehold.it/128x188&text=Img not found !{{/if}}">
+            </div>
+            <div class="col-lg-10">
+                <h4 class="list-group-item-heading">{{ItemAttributes.[0].Title.[0]}}</h4>
+                <p class="list-group-item-text">
+                {{#if EditorialReviews.[0].EditorialReview.[0].Content.[0]}}
+                    {{{EditorialReviews.[0].EditorialReview.[0].Content.[0]}}}
+                {{else}}
+                    <br/><div class="alert alert-warning" role="alert"><b>{{_ "utils.warning"}}</b> {{_ "addbook.nosummary"}}</div>
+                {{/if}}
+                </p>
+            </div>
+        </div>
+    </a>
+</template>

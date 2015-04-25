@@ -1,0 +1,79 @@
+{
+  "search": {
+    "placeholder": "Titre du livre. Ex : Artemis Fowl, Harry Potter,...",
+    "amazonplaceholder": "Titre, auteurs, ISBN, ESIN, EAN... Du livre.",
+    "searching": "Recherche...",
+    "notfound": "Livre non trouvé !",
+    "noresults": "Aucun livre trouvé..."
+  },
+  "swal": {
+    "confirm": {
+      "title": "Confirmation...",
+      "text": "Veuillez confirmer l'importation de ce livre.",
+      "confirm": "Importe le !",
+      "cancel": "Non, annule !"
+    },
+    "cancel": {
+      "title": "Importation annulée.",
+      "text": "L'importation de ce livre à bien été annulée..."
+    },
+    "imported": {
+      "title": "Importation réussie !",
+      "text": "L'importation de ce livre est un succès !"
+    },
+    "importerror": "Une erreur est survenue pendant l'importation... Veuillez réessayer."
+  },
+  "labels": {
+    "title": "Titre du livre",
+    "summary": "Bref résumé du livre",
+    "thumb": "Lien vers la couverture du livre",
+    "authors": {
+      "label": "Auteur(s) du livre",
+      "name": "Nom d'un auteur"
+    }
+  },
+  "utils": {
+    "mustbeconnected": "Vous devez être connecté pour pouvoir interargir !",
+    "success": "C'est bon !",
+    "error": "Erreur...",
+    "warning": "Attention !",
+    "authors": {
+      "nobody": "D'un certain auteur.",
+      "from": "Un livre de",
+      "and": "et"
+    }
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos"
+  },
+  "home": {
+    "welcome": "Bienvenue sur AfterBooks !",
+    "message": "AfterBooks vous permet de découvrir de nouveaux livres suivant vos lectures...",
+    "addabook": "En ajouter un ?",
+    "secondmessage": "AfterBooks répond en fait à une simple question : <b>Que lire après ?</b>"
+  },
+  "addbook": {
+    "title": "Importer un livre",
+    "small": "Deux solutions...",
+    "amazon": "Via amazon : titre, auteurs, ISBN, ESIN, EAN...",
+    "google": "Via google books : titre.",
+    "formtitle": "Veuillez remplir ce formulaire.",
+    "insert": "Importer !",
+    "nosummary": "Ce livre ne contient pas de résumé !"
+  },
+  "viewbook": {
+    "btra": "Après ce livre, la communauté vous recommande...",
+    "idea": "J'ai une idée de livre à lire après !",
+    "nobtra": "Pas encore de propositions ! Soyez le premier !",
+    "youcanvote": "Vous pouvez voter pour ce livre : ",
+    "editmode": {
+      "warning": "Mode édition !",
+      "text": "Cliquez sur le champ que vous désirez modifier. Quand vous aurez terminé, recliquez sur le bouton d'édition."
+    }
+  },
+  "addbtra": {
+    "title": "Choisir un livre à lire après",
+    "small": "Soyez sûr de vous..."
+  }
+}

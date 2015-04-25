@@ -1,0 +1,44 @@
+<template name="AddBtra">
+    <div class="page-header">
+        <h1>Choisir un livre à lire après <small>Choisissez bien...</small></h1>
+    </div>
+    <form id="searchform">
+        <div class="input-group input-group-lg">
+            {{> esInput index="books" class="form-control" placeholder="Ex : Artemis Fowl, Harry Potter, ..." }}
+            <span class="input-group-btn">
+        <button class="btn btn-default" type="button">
+            <span class="fa fa-search"></span>
+        </button>
+      </span>
+        </div>
+    </form>
+    <br/><br/>
+    {{#ifEsIsSearching index="books"}}
+        {{_ "search.searching"}}
+    {{else}}
+        <div class="list-group">
+            {{#esEach index="books"}}
+                {{> BookForAddBtra}}
+            {{/esEach}}
+        </div>
+        {{> esLoadMoreButton index="books"}}
+    {{/ifEsIsSearching}}
+
+    {{#ifEsHasNoResults index="books"}}
+        <h3>{{_ "search.notfound"}} <a href="{{pathFor 'AddBook'}}" class="btn btn-primary">{{_ "buttons.addabook"}}</a></h3>
+    {{/ifEsHasNoResults}}
+</template>
+
+<template name="BookForAddBtra">
+    <a class="list-group-item bookforaddbtra {{verif}}" data-id="{{_id}}">
+        <div class="row">
+            <div class="col-lg-2">
+                <img class="img-responsive img-rounded" src="{{thumb}}">
+            </div>
+            <div class="col-lg-10">
+                <h4 class="list-group-item-heading">{{title}}</h4>
+                <p class="list-group-item-text">{{summary}}</p>
+            </div>
+        </div>
+    </a>
+</template>
